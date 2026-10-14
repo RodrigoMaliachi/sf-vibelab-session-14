@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>Permission_Sets__c</field>
-        <value xsi:type="xsd:string">Buyer,Authenticated Payer</value>
+        <value xsi:type="xsd:string">B2BBuyer,AuthenticatedPayer</value>
     </values>
     <values>
         <field>Profile__c</field>
