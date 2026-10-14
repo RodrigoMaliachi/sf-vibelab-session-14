@@ -29,9 +29,21 @@ public class Action_CreateStoreUserTest {
             LIMIT 1
         ];
 
-        Assert.areEqual(0, [SELECT Id FROM PermissionSetAssignment WHERE AssigneeId =: createdUser.Id].size());
-        Assert.areEqual(Action_CreateStoreUser.READ_ONLY, createdUser.Store_Access__c);
-        Assert.areEqual(testContact.Id, createdUser.ContactId);
+        Assert.areEqual(
+            0,
+            [SELECT Id FROM PermissionSetAssignment WHERE AssigneeId =: createdUser.Id].size(),
+            'A permission set should be assigned to the created user.'
+        );
+        Assert.areEqual(
+            Action_CreateStoreUser.READ_ONLY,
+            createdUser.Store_Access__c,
+            'The created user should inherit the Contact read only access.'
+        );
+        Assert.areEqual(
+            testContact.Id,
+            createdUser.ContactId,
+            'The created user should be related to the source Contact.'
+        );
     }
 
     @IsTest
@@ -57,7 +69,11 @@ public class Action_CreateStoreUserTest {
         Test.stopTest();
 
         User updatedUser = [SELECT Store_Access__c FROM User WHERE Id = :existingUser.Id];
-        Assert.areEqual(Action_CreateStoreUser.READ_ONLY, updatedUser.Store_Access__c);
+        Assert.areEqual(
+            Action_CreateStoreUser.READ_ONLY,
+            updatedUser.Store_Access__c,
+            'The existing user access should match the updated Contact role.'
+        );
     }
 
     @IsTest
