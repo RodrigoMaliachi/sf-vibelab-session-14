@@ -8,6 +8,6 @@
     </values>
     <values>
         <field>Profile__c</field>
-        <value xsi:type="xsd:string">Customer Community Plus Login</value>
+        <value xsi:type="xsd:string">All Pines Customer Community Plus Login User</value>
     </values>
 </CustomMetadata>
