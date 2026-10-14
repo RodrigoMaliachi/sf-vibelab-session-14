@@ -1,3 +1,7 @@
+/**
+ * @description Invocable action that provisions storefront community users for Contacts,
+ * creating new users or syncing store access on existing ones.
+ */
 public with sharing class Action_CreateStoreUser {
     @TestVisible
     private static final String DEFAULT_SETTINGS_DEVELOPER_NAME = 'Default';
@@ -6,7 +10,12 @@ public with sharing class Action_CreateStoreUser {
     @TestVisible
     private static final String BUY_ACCESS = 'Buy Access';
     private static final Set<String> ACCESS_OPTIONS = new Set<String>{ READ_ONLY, BUY_ACCESS };
-    
+
+    /**
+     * @description Creates or updates store users for the given Contacts using the default
+     * Storefront User Setting.
+     * @param ids Contact Ids to provision store users for.
+     */
     @InvocableMethod(label='Create Store User' description='Creates a store user with permission set assignment')
     public static void createUsers(List<Id> ids) {
         createUsers(ids, Storefront_User_Setting__mdt.getInstance(DEFAULT_SETTINGS_DEVELOPER_NAME));
@@ -151,5 +160,8 @@ public with sharing class Action_CreateStoreUser {
         return newUser;
     }
 
+    /**
+     * @description Thrown when store users cannot be provisioned.
+     */
     public class CreateStoreUserException extends Exception {}
 }
