@@ -98,7 +98,8 @@ public class Action_CreateStoreUserTest {
 
     @IsTest
     private static void ignoresUnknownContactId() {
-        Id fakeContactId = (Id) '003000000000001AAA';
+        String contactPrefix = Contact.SObjectType.getDescribe().getKeyPrefix();
+        Id fakeContactId = Id.valueOf(contactPrefix + '000000000001');
 
         Test.startTest();
         Action_CreateStoreUser.createUsers(new List<Id>{ fakeContactId });
