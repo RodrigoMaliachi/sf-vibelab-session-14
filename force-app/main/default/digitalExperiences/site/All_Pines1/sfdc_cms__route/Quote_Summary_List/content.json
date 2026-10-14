@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "Quote Summary List",
+  "contentBody" : {
+    "activeViewId" : "quote_summary_list",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "quote-summary-list",
+    "urlPrefix" : "quote-summary-list"
+  },
+  "urlName" : "quote-summary-list"
+}
