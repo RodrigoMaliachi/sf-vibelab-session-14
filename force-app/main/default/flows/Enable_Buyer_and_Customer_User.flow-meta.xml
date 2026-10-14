@@ -286,7 +286,7 @@
             <field>Type</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Customer</stringValue>
+                <stringValue>Customer - Direct</stringValue>
             </value>
         </filters>
         <object>Account</object>
