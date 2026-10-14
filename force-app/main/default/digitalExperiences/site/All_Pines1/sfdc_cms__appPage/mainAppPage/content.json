@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__appPage",
+  "title" : "main",
+  "contentBody" : {
+    "currentThemeId" : "B2B_Commerce",
+    "headMarkup" : "<!-- branding stylesheets -->\n\r\n<link rel=\"stylesheet\" href=\"{ basePath }/assets/styles/salesforce-lightning-design-system.min.css?{ versionKey }\"/>\r\n<link rel=\"stylesheet\" href=\"{ basePath }/assets/styles/dxp-site-spacing-styling-hooks.min.css?{ versionKey }\" />\n<link rel=\"stylesheet\" href=\"{ basePath }/assets/styles/dxp-styling-hooks.min.css?{ versionKey }\" />\n<link rel=\"stylesheet\" href=\"{ basePath }/assets/styles/dxp-slds-extensions.min.css?{ versionKey }\" />\n\n\n\n<!-- branding stylesheets -->\n\n<!-- General -->\n<link rel=\"shortcut icon\" href=\"{basePath}/assets/favicon.ico?{versionKey}\">\n<link rel=\"stylesheet\" href=\"{basePath}/assets/css/theme2.css?{versionKey}\">\n<link rel=\"stylesheet\" href=\"{ styles/styles.css }\" />",
+    "isLockerServiceEnabled" : true,
+    "isRelaxedCSPLevel" : false,
+    "templateName" : "b2b-storefront"
+  },
+  "urlName" : "main"
+}

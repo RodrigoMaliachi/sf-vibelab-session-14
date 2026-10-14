@@ -1,0 +1,67 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Home",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "attributes" : {
+          "contentPosition" : "center center",
+          "contentWidth" : "100",
+          "height" : "400",
+          "singleButtonAlignment" : "center"
+        },
+        "id" : "bed41ae0-9256-490a-97f9-f5ad81e7ac11"
+      }, {
+        "attributes" : {
+          "textAlign" : "center",
+          "textDisplayInfo" : "{\"textStyle\": \"heading-large\"}"
+        },
+        "id" : "add217a1-57e2-423b-8239-749f4111cb8a"
+      }, {
+        "attributes" : {
+          "dxpStyle" : {
+            "padding" : {
+              "bottom" : "",
+              "left" : "0rem",
+              "right" : "0rem",
+              "top" : ""
+            }
+          }
+        },
+        "id" : "73907b46-e1f8-4280-8ba4-0f28745c5c82"
+      }, {
+        "attributes" : {
+          "dxpStyle" : {
+            "padding" : {
+              "bottom" : "",
+              "left" : "1rem",
+              "right" : "1rem",
+              "top" : ""
+            }
+          }
+        },
+        "id" : "15e7c561-7bf1-41db-9655-5982f9ecbf6d"
+      }, {
+        "attributes" : {
+          "contentWidth" : "70"
+        },
+        "id" : "6cde039b-c7e9-4eb7-abde-42eaa76293b1"
+      }, {
+        "attributes" : {
+          "dxpStyle" : {
+            "margin" : {
+              "bottom" : "0rem",
+              "left" : "0rem",
+              "right" : "0rem",
+              "top" : "0rem"
+            }
+          },
+          "textAlign" : "right",
+          "textDisplayInfo" : "{\"textStyle\": \"heading-large\"}"
+        },
+        "id" : "0ce42ef3-0096-4fdc-ae92-e7673dfef38c"
+      } ]
+    }
+  },
+  "urlName" : "home"
+}
