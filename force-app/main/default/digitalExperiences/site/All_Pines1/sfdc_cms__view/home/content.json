@@ -64,7 +64,22 @@
                     "linkAssistiveText" : "",
                     "paddingHorizontal" : "none",
                     "paddingVertical" : "none",
-                    "text" : "Unleash Your Inner Power: Fuel Your Day with Alpine Energy!",
+                    "text" : "You are a READ ONLY buyer",
+                    "textAlign" : "left",
+                    "textDecoration" : "{}",
+                    "textDisplayInfo" : "{\"textStyle\":\"heading-xlarge\",\"headingTag\":\"h1\",\"enableOverride\":false}"
+                  },
+                  "definition" : "dxp_base:textBlock",
+                  "id" : "28468753-a783-4c14-96b7-83d54614f784",
+                  "type" : "component"
+                }, {
+                  "attributes" : {
+                    "backgroundColor" : "",
+                    "isLinkable" : false,
+                    "linkAssistiveText" : "",
+                    "paddingHorizontal" : "none",
+                    "paddingVertical" : "none",
+                    "text" : "You have BUY ACCESS all over the store",
                     "textAlign" : "left",
                     "textDecoration" : "{\"bold\": false}",
                     "textDisplayInfo" : "{\"textStyle\": \"heading-xlarge\"}"
@@ -409,7 +424,40 @@
     },
     "dataProviders" : [ ],
     "themeLayoutType" : "Inner",
-    "viewType" : "home"
+    "viewType" : "home",
+    "contentOperations" : {
+      "operations" : [ {
+        "targetId" : "add217a1-57e2-423b-8239-749f4111cb8a",
+        "isHiddenOnOperationSuccess" : false,
+        "isActive" : true,
+        "rule" : {
+          "name" : "9fd044e8-f3a8-4e91-836d-1d9000257802",
+          "description" : "",
+          "criteriaType" : "AllCriteriaMatch",
+          "expressionCriteria" : [ {
+            "resource" : "User.Record.Store_Access__c",
+            "operator" : "Equal",
+            "value" : "Buy Access",
+            "criterionNumber" : 1
+          } ]
+        }
+      }, {
+        "targetId" : "28468753-a783-4c14-96b7-83d54614f784",
+        "isHiddenOnOperationSuccess" : false,
+        "isActive" : true,
+        "rule" : {
+          "name" : "351165c5-168f-44b1-8324-74cc7bac3eb4",
+          "description" : "",
+          "criteriaType" : "AllCriteriaMatch",
+          "expressionCriteria" : [ {
+            "resource" : "User.Record.Store_Access__c",
+            "operator" : "Equal",
+            "value" : "Read Only",
+            "criterionNumber" : 1
+          } ]
+        }
+      } ]
+    }
   },
   "urlName" : "home"
 }
