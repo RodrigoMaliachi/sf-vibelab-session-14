@@ -116,7 +116,7 @@ public class Action_CreateStoreUserTest {
 
     @IsTest
     private static void ignoresUnknownContactId() {
-        String contactPrefix = Contact.SObjectType.getDescribe().getKeyPrefix();
+        String contactPrefix = Contact.SObjectType.getDescribe(SObjectDescribeOptions.DEFERRED).getKeyPrefix();
         Id fakeContactId = Id.valueOf(contactPrefix + '000000000001');
 
         System.runAs(new User(Id = UserInfo.getUserId())) {
