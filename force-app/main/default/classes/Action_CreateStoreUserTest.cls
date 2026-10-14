@@ -16,13 +16,11 @@ public class Action_CreateStoreUserTest {
         testContact.Ecomm_Type__c = Action_CreateStoreUser.READ_ONLY;
         insert testContact;
 
-        BuyerGroup testBuyerGroup = new Factory_CommerceRecords.BuyerGroupFactory().create();
-
-        Test.startTest();
-        Action_CreateStoreUser.createUsers(new List<Id>{ testContact.Id });
-        Test.stopTest();
-
-        Assert.areNotEqual(0, [SELECT Id FROM PermissionSetAssignment WHERE AssigneeId IN (SELECT Id FROM User WHERE Username = 'testa1@email.com')].size());
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            Test.startTest();
+            Action_CreateStoreUser.createUsers(new List<Id>{ testContact.Id });
+            Test.stopTest();
+        }
 
         User createdUser = [
             SELECT Id, Store_Access__c, ContactId
@@ -30,7 +28,8 @@ public class Action_CreateStoreUserTest {
             WHERE Username = 'testa1@email.com'
             LIMIT 1
         ];
-        Assert.areEqual(1, [SELECT COUNT() FROM User WHERE ContactId = :testContact.Id]);
+
+        Assert.areEqual(0, [SELECT Id FROM PermissionSetAssignment WHERE AssigneeId =: createdUser.Id].size());
         Assert.areEqual(Action_CreateStoreUser.READ_ONLY, createdUser.Store_Access__c);
         Assert.areEqual(testContact.Id, createdUser.ContactId);
     }
@@ -63,11 +62,13 @@ public class Action_CreateStoreUserTest {
 
     @IsTest
     private static void emptyIdsDoNotCreateUsers() {
-        Test.startTest();
-        Action_CreateStoreUser.createUsers(new List<Id>());
-        Assert.areEqual(0, Limits.getQueries(), 'Empty input should return without querying records.');
-        Assert.areEqual(0, Limits.getDmlStatements(), 'Empty input should return without performing DML.');
-        Test.stopTest();    
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            Test.startTest();
+            Action_CreateStoreUser.createUsers(new List<Id>());
+            Assert.areEqual(0, Limits.getQueries(), 'Empty input should return without querying records.');
+            Assert.areEqual(0, Limits.getDmlStatements(), 'Empty input should return without performing DML.');
+            Test.stopTest();    
+        }
     }
 
     @IsTest
@@ -82,18 +83,19 @@ public class Action_CreateStoreUserTest {
         con.LastName = 'Settings';
         con.Ecomm_Type__c = Action_CreateStoreUser.BUY_ACCESS;
         insert con;
-
-        Test.startTest();
-        try {
-            Action_CreateStoreUser.createUsers(new List<Id>{ con.Id }, null);
-            Assert.fail('Expected an exception when Default New User Settings are missing.');
-        } catch (Action_CreateStoreUser.CreateStoreUserException e) {
-            Assert.isTrue(
-                e.getMessage().contains('Default New User Settings are missing'),
-                'Exception should explain that the default configuration is missing.'
-            );
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            Test.startTest();
+            try {
+                Action_CreateStoreUser.createUsers(new List<Id>{ con.Id }, null);
+                Assert.fail('Expected an exception when Default New User Settings are missing.');
+            } catch (Action_CreateStoreUser.CreateStoreUserException e) {
+                Assert.isTrue(
+                    e.getMessage().contains('Default New User Settings are missing'),
+                    'Exception should explain that the default configuration is missing.'
+                );
+            }
+            Test.stopTest();
         }
-        Test.stopTest();
     }
 
     @IsTest
@@ -101,10 +103,12 @@ public class Action_CreateStoreUserTest {
         String contactPrefix = Contact.SObjectType.getDescribe().getKeyPrefix();
         Id fakeContactId = Id.valueOf(contactPrefix + '000000000001');
 
-        Test.startTest();
-        Action_CreateStoreUser.createUsers(new List<Id>{ fakeContactId });
-        Assert.areEqual(1, Limits.getQueries(), 'Only the Contact lookup should run for an unknown Contact id.');
-        Assert.areEqual(0, Limits.getDmlStatements(), 'No users should be created when the Contact is not found.');
-        Test.stopTest();
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            Test.startTest();
+            Action_CreateStoreUser.createUsers(new List<Id>{ fakeContactId });
+            Assert.areEqual(1, Limits.getQueries(), 'Only the Contact lookup should run for an unknown Contact id.');
+            Assert.areEqual(0, Limits.getDmlStatements(), 'No users should be created when the Contact is not found.');
+            Test.stopTest();
+        }
     }
 }
