@@ -67,7 +67,7 @@ public class Action_CreateStoreUserTest {
             Action_CreateStoreUser.createUsers(new List<Id>());
             Assert.areEqual(0, Limits.getQueries(), 'Empty input should return without querying records.');
             Assert.areEqual(0, Limits.getDmlStatements(), 'Empty input should return without performing DML.');
-            Test.stopTest();    
+            Test.stopTest();
         }
     }
 
