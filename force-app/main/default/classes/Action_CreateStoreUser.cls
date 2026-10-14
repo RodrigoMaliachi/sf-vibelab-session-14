@@ -28,6 +28,7 @@ public with sharing class Action_CreateStoreUser {
                 FROM Contact
                 WHERE Id IN :ids
                 AND Ecomm_Type__c IN :ACCESS_OPTIONS
+                WITH USER_MODE
             ];
             if (contacts.isEmpty()) {
                 return;
@@ -43,7 +44,7 @@ public with sharing class Action_CreateStoreUser {
             );
 
             if (!usersToUpdate.isEmpty()) {
-                update usersToUpdate;
+                Database.update(usersToUpdate, AccessLevel.USER_MODE);
             }
 
             List<User> usersToCreate = createMissingUsers(contactsToCreateUsersFor, settings);
@@ -61,6 +62,7 @@ public with sharing class Action_CreateStoreUser {
             SELECT Id, ContactId, Store_Access__c
             FROM User
             WHERE ContactId IN :contactIds
+            WITH USER_MODE
         ]) {
             usersByContactId.put(existingUser.ContactId, existingUser);
         }
@@ -94,7 +96,13 @@ public with sharing class Action_CreateStoreUser {
             return users;
         }
 
-        Profile profile = [SELECT Id FROM Profile WHERE Name = :settings.Profile__c LIMIT 1];
+        Profile profile = [
+            SELECT Id
+            FROM Profile
+            WHERE Name = :settings.Profile__c
+            WITH USER_MODE
+            LIMIT 1
+        ];
         for (Contact contact : contacts) {
             users.add(buildCommunityUser(contact, profile.Id));
         }
@@ -104,7 +112,10 @@ public with sharing class Action_CreateStoreUser {
     private static void insertUsers(List<User> users, Storefront_User_Setting__mdt settings) {
         Database.DMLOptions options = new Database.DMLOptions();
         options.EmailHeader.triggerUserEmail = true;
-        Database.insert(users, options);
+        for (User userToInsert : users) {
+            userToInsert.setOptions(options);
+        }
+        Database.insert(users, AccessLevel.USER_MODE);
         System.enqueueJob(new Utils_AssignPermissionSets(users, settings.Permission_Sets__c));
     }
 
