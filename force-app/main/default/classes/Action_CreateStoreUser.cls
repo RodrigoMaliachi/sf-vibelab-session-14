@@ -125,9 +125,6 @@ public with sharing class Action_CreateStoreUser {
         newUser.ContactId = contact.Id;
         newUser.Store_Access__c = contact.Ecomm_Type__c;
 
-        Database.DMLOptions options = new Database.DMLOptions();
-        options.EmailHeader.triggerUserEmail = true;
-        newUser.setOptions(options);
         return newUser;
     }
 
