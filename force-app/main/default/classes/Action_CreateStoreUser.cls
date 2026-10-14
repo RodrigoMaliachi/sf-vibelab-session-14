@@ -19,6 +19,13 @@ public with sharing class Action_CreateStoreUser {
         }
 
         try {
+            provisionUsers(ids, settings);
+        } catch (Exception e) {
+            throw new CreateStoreUserException('Unable to provision community users: ' + e.getMessage());
+        }
+    }
+
+    private static void provisionUsers(List<Id> ids, Storefront_User_Setting__mdt settings) {
             if (settings == null) {
                 throw new CreateStoreUserException('Default New User Settings are missing.');
             }
@@ -34,6 +41,10 @@ public with sharing class Action_CreateStoreUser {
                 return;
             }
 
+        synchronizeExistingUsers(contacts);
+        createUsersForNewContacts(contacts, settings);
+    }
+    private static void synchronizeExistingUsers(List<Contact> contacts) {
             Map<Id, Contact> contactsById = new Map<Id, Contact>(contacts);
             Map<Id, User> existingUsersByContactId = findExistingUsers(contactsById.keySet());
             List<User> usersToUpdate = new List<User>();
@@ -46,13 +57,14 @@ public with sharing class Action_CreateStoreUser {
             if (!usersToUpdate.isEmpty()) {
                 Database.update(usersToUpdate, AccessLevel.USER_MODE);
             }
+        contacts.clear();
+        contacts.addAll(contactsToCreateUsersFor);
+    }
 
-            List<User> usersToCreate = createMissingUsers(contactsToCreateUsersFor, settings);
-            if (!usersToCreate.isEmpty()) {
-                insertUsers(usersToCreate, settings);
-            }
-        } catch (Exception e) {
-            throw new CreateStoreUserException('Unable to provision community users: ' + e.getMessage());
+    private static void createUsersForNewContacts(List<Contact> contacts, Storefront_User_Setting__mdt settings) {
+        List<User> usersToCreate = createMissingUsers(contacts, settings);
+        if (!usersToCreate.isEmpty()) {
+            insertUsers(usersToCreate, settings);
         }
     }
 
