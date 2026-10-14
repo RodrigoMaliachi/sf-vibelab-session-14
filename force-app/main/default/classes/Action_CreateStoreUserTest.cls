@@ -29,9 +29,16 @@ public class Action_CreateStoreUserTest {
             LIMIT 1
         ];
 
+        List<PermissionSetAssignment> assignments = [
+            SELECT Id
+            FROM PermissionSetAssignment
+            WHERE AssigneeId =: createdUser.Id
+            AND PermissionSet.IsOwnedByProfile = false
+        ];
+
         Assert.areEqual(
-            0,
-            [SELECT Id FROM PermissionSetAssignment WHERE AssigneeId =: createdUser.Id].size(),
+            2,
+            assignments.size(),
             'A permission set should be assigned to the created user.'
         );
         Assert.areEqual(
