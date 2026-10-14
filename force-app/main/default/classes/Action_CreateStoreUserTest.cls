@@ -57,12 +57,10 @@ public class Action_CreateStoreUserTest {
             con.Ecomm_Type__c = Action_CreateStoreUser.READ_ONLY;
             update con;
 
-
             existingUser = [SELECT Id FROM User WHERE Id = :response.userId];
             existingUser.Store_Access__c = Action_CreateStoreUser.BUY_ACCESS;
             update existingUser;
         }
-
 
         Test.startTest();
         Action_CreateStoreUser.createUsers(new List<Id>{ con.Id });
