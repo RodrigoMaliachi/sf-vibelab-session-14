@@ -60,4 +60,50 @@ public class Action_CreateStoreUserTest {
         User updatedUser = [SELECT Store_Access__c FROM User WHERE Id = :existingUser.Id];
         Assert.areEqual(Action_CreateStoreUser.READ_ONLY, updatedUser.Store_Access__c);
     }
+
+    @IsTest
+    private static void emptyIdsDoNotCreateUsers() {
+        Test.startTest();
+        Action_CreateStoreUser.createUsers(new List<Id>());
+        Assert.areEqual(0, Limits.getQueries(), 'Empty input should return without querying records.');
+        Assert.areEqual(0, Limits.getDmlStatements(), 'Empty input should return without performing DML.');
+        Test.stopTest();    
+    }
+
+    @IsTest
+    private static void throwsWhenDefaultSettingsAreMissing() {
+        Account testAccount = new Factory_CommerceRecords.AccountFactory().build();
+        testAccount.Name = 'Missing Settings';
+        insert testAccount;
+
+        Contact con = new Factory_CommerceRecords.ContactFactory(testAccount.Id).build();
+        con.Email = 'missing.settings@example.com';
+        con.FirstName = 'Missing';
+        con.LastName = 'Settings';
+        con.Ecomm_Type__c = Action_CreateStoreUser.BUY_ACCESS;
+        insert con;
+
+        Test.startTest();
+        try {
+            Action_CreateStoreUser.createUsers(new List<Id>{ con.Id }, null);
+            Assert.fail('Expected an exception when Default New User Settings are missing.');
+        } catch (Action_CreateStoreUser.CreateStoreUserException e) {
+            Assert.isTrue(
+                e.getMessage().contains('Default New User Settings are missing'),
+                'Exception should explain that the default configuration is missing.'
+            );
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void ignoresUnknownContactId() {
+        Id fakeContactId = (Id) '003000000000001AAA';
+
+        Test.startTest();
+        Action_CreateStoreUser.createUsers(new List<Id>{ fakeContactId });
+        Assert.areEqual(1, Limits.getQueries(), 'Only the Contact lookup should run for an unknown Contact id.');
+        Assert.areEqual(0, Limits.getDmlStatements(), 'No users should be created when the Contact is not found.');
+        Test.stopTest();
+    }
 }
